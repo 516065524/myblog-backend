@@ -7,6 +7,8 @@ import { RegisterDTO } from './dto/register.dto';
 import { User } from './entity/user.entity';
 import { LoginDTO } from './dto/login.dto';
 import { JwtService } from '@nestjs/jwt';
+import { InfoDTO } from './dto/info.dto';
+import { randomAvatar } from 'src/constant/avatar';
 
 @Injectable()
 export class UserService {
@@ -28,13 +30,21 @@ export class UserService {
 
   async register(registerDTO: RegisterDTO): Promise<any> {
     await this.checkRegisterForm(registerDTO);
-    const { nickname, password, mobile } = registerDTO;
+    const { nickname, password, mobile, email, avactar, username } =
+      registerDTO;
+    const newUser: User = new User();
+    if (!avactar) {
+      newUser.avactar = randomAvatar();
+    }
     const salt = makeSalt();
     const hasPassWord = encryptPassword(password, salt);
-    const newUser: User = new User();
     newUser.nickname = nickname;
     newUser.mobile = mobile;
     newUser.password = hasPassWord;
+    newUser.salt = salt;
+    newUser.email = email;
+    newUser.username = username;
+    newUser.salt = salt;
     newUser.salt = salt;
     return await this.userRespository.save(newUser);
   }
@@ -58,6 +68,22 @@ export class UserService {
     }
 
     return user;
+  }
+
+  // 获取信息
+  async getInfo(infoTO: InfoDTO) {
+    const { id } = infoTO;
+    console.log(infoTO);
+    const user = await this.userRespository.findOne({
+      where: { id },
+      select: ['nickname', 'mobile'],
+    });
+    if (!user) {
+      throw new NotFoundException('用户不存在');
+    }
+    return {
+      userInfo: Object.assign(user, { userId: id }),
+    };
   }
 
   certificate(user: User) {

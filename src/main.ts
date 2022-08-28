@@ -10,7 +10,6 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalInterceptors(new TransformInterceptor());
   app.useGlobalFilters(new HttpExecptionFilter());
-
   const options = new DocumentBuilder()
     .setTitle('blog-serve')
     .setDescription('接口文档')

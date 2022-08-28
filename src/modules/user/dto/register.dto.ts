@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, Matches } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, Matches } from 'class-validator';
 import { regMobileCN } from 'src/utils/regex.util';
 
 export class RegisterDTO {
@@ -33,4 +33,19 @@ export class RegisterDTO {
   })
   @IsNotEmpty({ message: '请再次输入密码' })
   readonly passwordRepeat: string;
+
+  @ApiProperty({ example: '123456@qq.com', description: '邮箱' })
+  @IsEmail({}, { message: '请填写正确格式的邮箱' })
+  email: string;
+
+  @ApiProperty({ example: 'admin', description: '用户名' })
+  @IsNotEmpty({ message: '用户名不能为空' })
+  username: string;
+
+  @ApiProperty({
+    example: 'https:www.xxx.png',
+    description: '头像',
+    required: false,
+  })
+  avactar: string;
 }

@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ArticleModule } from './modules/article/article.module';
 import { UserModule } from './modules/user/user.module';
+import { TagModule } from './modules/tag/tag.module';
 import * as path from 'path';
 import '../env.parse';
 
@@ -18,6 +19,7 @@ import '../env.parse';
     }),
     ArticleModule,
     UserModule,
+    TagModule,
   ],
   controllers: [AppController],
   providers: [AppService],
